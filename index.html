@@ -65,19 +65,22 @@
   --font-display: 'Manrope', system-ui, sans-serif;
   --font-body:    'Inter', system-ui, sans-serif;
 
-  --hero-full: 468px;
+  --hero-full: 400px;
   --hero-min:  96px;
 }
 
-/* Responsive hero height — avoid squeezing content on shorter viewports */
+/* Responsive hero height — keep title + meta + artifact + CTA visible without scroll */
+@media (max-height: 900px) {
+  :root { --hero-full: 340px; }
+}
 @media (max-height: 780px) {
-  :root { --hero-full: 380px; }
+  :root { --hero-full: 300px; }
 }
 @media (max-height: 680px) {
-  :root { --hero-full: 320px; }
+  :root { --hero-full: 260px; }
 }
 @media (max-height: 580px) {
-  :root { --hero-full: 260px; }
+  :root { --hero-full: 220px; }
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
