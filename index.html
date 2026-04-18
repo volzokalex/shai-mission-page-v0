@@ -114,7 +114,7 @@ body {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  padding-bottom: 120px; /* room for sticky CTA */
+  padding-bottom: calc(120px + env(safe-area-inset-bottom));
   position: relative;
   min-height: 0;
   overscroll-behavior: none;
@@ -725,7 +725,7 @@ body {
 .sticky-cta-wrap {
   position: absolute;
   left: 0; right: 0; bottom: 0;
-  padding: 16px 20px 28px;
+  padding: 16px 20px calc(28px + env(safe-area-inset-bottom));
   background: linear-gradient(to top, var(--surface-canvas) 60%, rgba(250,248,243,0));
   pointer-events: none;
 }
