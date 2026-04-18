@@ -64,6 +64,20 @@
 
   --font-display: 'Manrope', system-ui, sans-serif;
   --font-body:    'Inter', system-ui, sans-serif;
+
+  --hero-full: 468px;
+  --hero-min:  96px;
+}
+
+/* Responsive hero height — avoid squeezing content on shorter viewports */
+@media (max-height: 780px) {
+  :root { --hero-full: 380px; }
+}
+@media (max-height: 680px) {
+  :root { --hero-full: 320px; }
+}
+@media (max-height: 580px) {
+  :root { --hero-full: 260px; }
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
@@ -114,8 +128,8 @@ body {
   position: sticky;
   top: 0;
   width: 100%;
-  height: calc(468px - 372px * var(--scroll-progress, 0));
-  margin-bottom: calc(372px * var(--scroll-progress, 0));
+  height: calc(var(--hero-full) - (var(--hero-full) - var(--hero-min)) * var(--scroll-progress, 0));
+  margin-bottom: calc((var(--hero-full) - var(--hero-min)) * var(--scroll-progress, 0));
   background:
     radial-gradient(ellipse at 50% 40%, #1e1914 0%, #0b0907 70%, #060606 100%);
   overflow: hidden;
@@ -921,11 +935,17 @@ body {
     (function () {
       const screen = document.querySelector('.screen');
       if (!screen) return;
-      const SHRINK_DISTANCE = 372;
+      const root = document.documentElement;
+      const readShrink = () => {
+        const full = parseFloat(getComputedStyle(root).getPropertyValue('--hero-full')) || 468;
+        const min = parseFloat(getComputedStyle(root).getPropertyValue('--hero-min')) || 96;
+        return Math.max(1, full - min);
+      };
+      let shrinkDistance = readShrink();
       let ticking = false;
       let lastP = -1;
       const update = () => {
-        const raw = screen.scrollTop / SHRINK_DISTANCE;
+        const raw = screen.scrollTop / shrinkDistance;
         const clamped = Math.min(1, Math.max(0, raw));
         const p = Math.round(clamped * 100) / 100;
         if (p !== lastP) {
@@ -940,6 +960,10 @@ body {
           ticking = true;
         }
       }, { passive: true });
+      window.addEventListener('resize', () => {
+        shrinkDistance = readShrink();
+        update();
+      });
       update();
     })();
   </script>
